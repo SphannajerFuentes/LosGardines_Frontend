@@ -1,75 +1,39 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+logistica-frontend/
+└── src/
+    ├── config/
+    │   └── api.ts                 # Instancia de Axios configurada con el interceptor JWT
+    ├── context/
+    │   └── AuthContext.tsx        # Estado global de sesión y rol del usuario (REQ-015)
+    ├── components/                # UI Transversal e Inmutable (Liskov Substitution - L)
+    │   ├── Layout.tsx             # Esqueleto principal de la app (REQ-015)
+    │   ├── Navbar.tsx             # Barra superior con datos de usuario y rol (REQ-015)
+    │   └── Sidebar.tsx            # Menú lateral con control de accesos por rol (REQ-015)
+    ├── helpers/
+    │   └── semaforoFecha.ts       # REQ-012: Función pura utilitaria de semaforización
+    ├── shared/
+    │   └── types.ts               # Contratos y tipos globales compartidos (Medicamento, Usuario)
+    └── features/                  # MÓDULOS DE NEGOCIO AISLADOS (Open/Closed - O)
+        ├── dashboard/             # Módulo de la pantalla principal
+        │   ├── components/
+        │   │   └── PanelNotificaciones.tsx # REQ-016: Renderiza las alertas de stock
+        │   ├── hooks/
+        │   │   └── useNotificaciones.ts    # Lógica de fetch y estado de alertas (REQ-016)
+        │   ├── services/
+        │   │   └── dashboardService.ts     # Petición a /api/notificaciones
+        │   └── pages/
+        │       └── DashboardPage.tsx       # Vista que une el panel con la página principal
+        └── simulador/             # Módulo del "Simulador de Kardex" (REQ-017 y REQ-018)
+            ├── components/
+            │   ├── FormularioIngreso.tsx   # REQ-017: Formulario de entradas / lote
+            │   └── FormularioSalida.tsx    # REQ-018: Formulario de salidas / FIFO
+            ├── hooks/
+            │   ├── useSimuladorIngreso.ts  # Lógica de envío, validación y errores del REQ-011
+            │   └── useSimuladorSalida.ts   # Lógica de envío, validación y errores del REQ-013
+            ├── services/
+            │   └── simuladorService.ts     # Peticiones POST a /api/ingresos y /api/salidas
+            ├── types/
+            │   └── index.ts                # Interfaces TypeScript exclusivas del simulador
+            └── pages/
+                └── SimuladorKardexPage.tsx # Vista principal que agrupa ambos paneles interactivos
