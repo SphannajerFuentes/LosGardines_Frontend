@@ -1,5 +1,6 @@
-# React + TypeScript + Vite
+# Estructura del Frontend (React + Vite + TypeScript + React Compiler)
 
+```text
 logistica-frontend/
 └── src/
     ├── config/
@@ -37,3 +38,4 @@ logistica-frontend/
             │   └── index.ts                # Interfaces TypeScript exclusivas del simulador
             └── pages/
                 └── SimuladorKardexPage.tsx # Vista principal que agrupa ambos paneles interactivos
+```
