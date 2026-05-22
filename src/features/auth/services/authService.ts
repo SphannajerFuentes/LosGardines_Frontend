@@ -1,21 +1,11 @@
 import { api } from '../../../config/api';
 
 export const authService = {
-  signIn: async (email: string, password: string) => {
-    // Esta ruta debe coincidir con tu endpoint de login en Python
+  signIn: async (nombre: string) => {
     const response = await api.post('/auth/login', {
-      email,
-      password,
+      nombre, 
     });
-    
-    // Suponiendo que tu API devuelve { access_token: "..." }
-    const { access_token } = response.data;
-    localStorage.setItem('token', access_token);
-    
-    return response.data;
-  },
 
-  logout: () => {
-    localStorage.removeItem('token');
+    return response.data;
   }
 };
