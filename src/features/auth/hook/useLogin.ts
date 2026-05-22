@@ -10,15 +10,14 @@ export const useLogin = () => {
     setIsLoading(true);
     
     const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    //const email = formData.get('email') as string;
+    //const password = formData.get('password') as string;
 
     try {
       // Llamada al servicio que habla con Python
-      await authService.signIn(email, password);
+      //await authService.signIn(email, password);
       
-      // Aquí podrías disparar una acción para actualizar tu AuthContext
-      // window.location.href = '/dashboard'; // O usa useNavigate
+      window.location.href = '/dashboard'; 
     } catch (err: any) {
       setError(err.response?.data?.detail || "Error al iniciar sesión");
     } finally {
