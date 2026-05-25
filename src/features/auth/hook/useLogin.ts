@@ -17,18 +17,16 @@ export const useLogin = () => {
     
     const formData = new FormData(e.target as HTMLFormElement);
     const nombre = formData.get('nombre') as string;
+    const contrasena = formData.get('contrasena') as string;
 
     try {
-      const data = await authService.signIn(nombre.trim()); 
+      // Ahora enviamos ambos parámetros
+      const data = await authService.signIn(nombre.trim(), contrasena); 
       
-      // Guardamos la sesión y el rol en el Context
       guardarSesion(data.access_token, data.user);
-      
-      // Redirigimos al dashboard. 
-      // El dashboard leerá el rol del usuario para mostrar/ocultar menús.
       navigate('/dashboard'); 
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Error al iniciar sesión");
+      setError(err.response?.data?.detail || "Usuario o contraseña incorrectos");
     } finally {
       setIsLoading(false);
     }

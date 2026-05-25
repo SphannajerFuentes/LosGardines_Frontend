@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import { LoginPage } from './features/auth/pages/LoginPage';
 import { DashboardPage } from './features/dashboard/pages/DashboardPage';
+import { Layout } from './components/Layout';
 
 // 1. Componente Guardián de Autenticación General (Corregido con React.ReactElement)
 const RutaProtegida = ({ children }: { children: React.ReactElement }) => {
@@ -32,34 +33,25 @@ export function AppRoutes() {
 
   return (
     <Routes>
-      {/* Ruta Pública: Login */}
+      {/* Ruta Pública: Login (NO usa Layout porque es a pantalla completa) */}
       <Route 
         path="/login" 
         element={usuario ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
       />
 
-      {/* Rutas Privadas Protegidas temporales sin Layout */}
-      <Route 
-        path="/" 
-        element={
-          <RutaProtegida>
-            <DashboardPage />
-          </RutaProtegida>
-        } 
-      />
-
-      {/* Endpoint directo al Dashboard una vez logueado */}
+      {/* Rutas Privadas: ENVUELTAS EN EL LAYOUT */}
       <Route 
         path="/dashboard" 
         element={
           <RutaProtegida>
-            <DashboardPage />
+            <Layout>
+              <DashboardPage />
+            </Layout>
           </RutaProtegida>
         } 
       />
 
-      {/* Comodín: Cualquier ruta no existente manda al login o dashboard */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
