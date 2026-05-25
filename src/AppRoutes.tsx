@@ -8,6 +8,10 @@ import { Layout } from "./components/Layout";
 import { AdminGuard } from "./components/AdminGuard";
 import { UsuariosPage } from "./features/admin/pages/UsuariosPage";
 import { ProveedoresPage } from "./features/admin/pages/ProveedoresPage";
+import { IncidenciasPage } from "./features/logistics/pages/IncidenciasPage";
+import { RecepcionPage } from "./features/logistics/pages/RecepcionPage";
+import { IngresoStockPage } from './features/logistics/pages/IngresoStockPage';
+import { GestionInventarioPage } from "./features/logistics/pages/GestionInventarioPage";
 
 const RutaProtegida = ({ children }: { children: React.ReactElement }) => {
   const { usuario, cargandoSesion } = useContext(AuthContext);
@@ -77,6 +81,46 @@ export function AppRoutes() {
           </RutaProtegida>
         }
       />
+
+      <Route
+        path="/compras"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <RecepcionPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/incidencias"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <IncidenciasPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/compras"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <RecepcionPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+
+      <Route path="/inventario" element={
+        <RutaProtegida>
+          <Layout>
+            <GestionInventarioPage /> 
+          </Layout>
+        </RutaProtegida>
+      } />
 
       {/* Cualquier otra ruta inexistente */}
       <Route path="*" element={<Navigate to="/" replace />} />

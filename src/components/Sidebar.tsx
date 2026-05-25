@@ -7,6 +7,8 @@ import {
   Activity,
   Users,
   Building2,
+  AlertTriangle,
+  PackageCheck,
 } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
@@ -14,7 +16,6 @@ export const Sidebar: React.FC = () => {
 
   // Definición de módulos y quién puede verlos (REQ-015)
   const menuItems = [
-    // Todos ven el Dashboard
     {
       path: "/dashboard",
       label: "Panel Principal",
@@ -22,34 +23,46 @@ export const Sidebar: React.FC = () => {
       roles: ["Administrador", "Almacenero", "Farmacéutico"],
     },
 
-    // Solo Admin(1) y Almacenero(2) ven compras e ingresos
+    // Agrupamos la logística
     {
       path: "/compras",
-      label: "Logística e Ingresos",
+      label: "Recepción de Órdenes",
+      icon: PackageCheck,
+      roles: ["Administrador", "Almacenero"],
+    },
+    {
+      path: "/inventario",
+      label: "Gestión de Inventario",
       icon: Package,
+      roles: ["Administrador", "Farmacéutico"],
+    },
+    {
+      path: "/incidencias",
+      label: "Reportar Incidencia",
+      icon: AlertTriangle,
       roles: ["Administrador", "Almacenero"],
     },
 
-    // Solo Admin(1) y Farmacéutico(3) ven ventas/salidas
+    // Gestión administrativa
+    {
+      path: "/admin/usuarios",
+      label: "Gestionar Usuarios",
+      icon: Users,
+      roles: ["Administrador"],
+    },
+    {
+      path: "/admin/proveedores",
+      label: "Gestionar Proveedores",
+      icon: Building2,
+      roles: ["Administrador"],
+    },
     {
       path: "/operaciones",
       label: "Ventas y Kardex",
       icon: Activity,
       roles: ["Administrador", "Farmacéutico"],
     },
-  {
-    path: "/admin/usuarios",
-    label: "Gestionar Usuarios",
-    icon: Users,
-    roles: ["Administrador"],
-  },
-  {
-    path: "/admin/proveedores",
-    label: "Gestionar Proveedores",
-    icon: Building2,
-    roles: ["Administrador"],
-  },
-];
+  ];
 
   return (
     <aside className="w-64 bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col h-full shadow-sm z-50">
