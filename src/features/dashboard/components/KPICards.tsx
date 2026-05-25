@@ -1,12 +1,47 @@
+// src/features/dashboard/components/KPICards.tsx
 import React from 'react';
 import { Package, TrendingDown, AlertTriangle, CheckCircle } from 'lucide-react';
 
-export const KPICards: React.FC = () => {
+interface KPICardsProps {
+  data: {
+    stock_total?: number | string;
+    ventas_hoy?: number | string;
+    lotes_por_vencer?: number | string;
+    ordenes_recibidas?: number | string;
+  } | null;
+}
+
+export const KPICards: React.FC<KPICardsProps> = ({ data }) => {
+  // Mapeamos los datos reales del backend respetando las llaves del json del servicio
   const kpis = [
-    { title: "Stock Total", value: "12,482", icon: Package, color: "text-primary", bg: "bg-primary-container/20" },
-    { title: "Ventas Hoy", value: "S/ 1,240.50", icon: TrendingDown, color: "text-secondary", bg: "bg-secondary-container" },
-    { title: "Lotes por Vencer", value: "14", icon: AlertTriangle, color: "text-on-error-container", bg: "bg-error-container" },
-    { title: "Órdenes Recibidas", value: "5", icon: CheckCircle, color: "text-on-secondary-fixed-variant", bg: "bg-secondary-fixed" },
+    { 
+      title: "Stock Total", 
+      value: data?.stock_total ?? "0", 
+      icon: Package, 
+      color: "text-primary", 
+      bg: "bg-primary-container/20" 
+    },
+    { 
+      title: "Ventas Hoy", 
+      value: typeof data?.ventas_hoy === 'number' ? `S/ ${data.ventas_hoy.toFixed(2)}` : (data?.ventas_hoy ?? "S/ 0.00"), 
+      icon: TrendingDown, 
+      color: "text-secondary", 
+      bg: "bg-secondary-container" 
+    },
+    { 
+      title: "Lotes por Vencer", 
+      value: data?.lotes_por_vencer ?? "0", 
+      icon: AlertTriangle, 
+      color: "text-on-error-container", 
+      bg: "bg-error-container" 
+    },
+    { 
+      title: "Órdenes Recibidas", 
+      value: data?.ordenes_recibidas ?? "0", 
+      icon: CheckCircle, 
+      color: "text-on-secondary-fixed-variant", 
+      bg: "bg-secondary-fixed" 
+    },
   ];
 
   return (
@@ -20,7 +55,7 @@ export const KPICards: React.FC = () => {
             </div>
             <div>
               <p className="text-on-surface-variant font-medium text-[13px]">{kpi.title}</p>
-              <h3 className="font-headline text-2xl font-bold text-on-surface">{kpi.value}</h3>
+              <h3 className="font-headline text-2xl font-bold text-on-surface tracking-tight">{kpi.value}</h3>
             </div>
           </div>
         );
