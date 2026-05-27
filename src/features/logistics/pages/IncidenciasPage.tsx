@@ -1,100 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { logisticsService } from "../services/logisticsService";
+import React, { useState } from "react";
 import { useIncidencias } from "../hooks/useIncidencias";
-import { AlertTriangle, CheckCircle, Package } from "lucide-react";
+import { AlertTriangle, CheckCircle, PackageX, Calendar } from "lucide-react";
+import { NotificacionFeedback } from "../../../components/NotificacionFeedback";
 
 export const IncidenciasPage: React.FC = () => {
-  const [ordenes, setOrdenes] = useState<any[]>([]);
-  const [selectedOrden, setSelectedOrden] = useState<any>(null);
-  const { registrarIncidencia, isLoading } = useIncidencias();
-  const [form, setForm] = useState({ desc: "", tipo: 1 });
+  const { incidencias, isLoading, marcarComoResuelta } = useIncidencias();
+  
+  // Estados para notificaciones
+  const [msgError, setMsgError] = useState<string | null>(null);
+  const [msgSuccess, setMsgSuccess] = useState<string | null>(null);
 
-  useEffect(() => {
-    logisticsService.getOrdenes().then(setOrdenes);
-  }, []);
+  const getTipoLabel = (tipo: number) => {
+    switch(tipo) {
+      case 1: return "Dañado/Roto";
+      case 2: return "Faltante";
+      case 3: return "Vencido";
+      default: return "Otro";
+    }
+  };
 
-  const handleSelect = (orden: any) => setSelectedOrden(orden);
-
-  const enviar = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedOrden) return;
-
-    const exito = await registrarIncidencia({
-      id_orden_compra: selectedOrden.id,
-      id_proveedor: selectedOrden.proveedor_id,
-      descripcion: form.desc,
-      tipo: form.tipo,
-    });
-    if (exito) {
-      alert("Incidencia reportada");
-      setSelectedOrden(null);
+  // Envoltorio para disparar la notificación al resolver
+  const handleMarcarResuelta = async (id: number) => {
+    try {
+      await marcarComoResuelta(id);
+      setMsgSuccess("¡Incidencia marcada como resuelta correctamente!");
+    } catch (error) {
+      setMsgError("Hubo un error al intentar actualizar la incidencia.");
     }
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Gestionar Incidencias</h2>
-
-      {/* TABLA DE SELECCIÓN */}
-      <div className="bg-white rounded-2xl border shadow-sm mb-8 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-surface-container-low">
-            <tr>
-              <th className="p-4">ID</th>
-              <th className="p-4">Proveedor</th>
-              <th className="p-4">Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ordenes.map((o) => (
-              <tr
-                key={o.id}
-                className="border-t hover:bg-surface-container-lowest"
-              >
-                <td className="p-4">{o.id}</td>
-                <td className="p-4">{o.proveedor_nombre}</td>
-                <td className="p-4">
-                  <button
-                    onClick={() => handleSelect(o)}
-                    className="text-primary font-bold"
-                  >
-                    Seleccionar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6">
+      
+      {/* 🔔 Panel Dinámico de Notificaciones */}
+      <div className="space-y-4">
+        {msgError && <NotificacionFeedback mensaje={msgError} tipo="error" onClose={() => setMsgError(null)} />}
+        {msgSuccess && <NotificacionFeedback mensaje={msgSuccess} tipo="success" onClose={() => setMsgSuccess(null)} />}
       </div>
 
-      {/* FORMULARIO CONDICIONAL */}
-      {selectedOrden && (
-        <form
-          onSubmit={enviar}
-          className="bg-surface-container-lowest p-6 rounded-2xl border space-y-4"
-        >
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Package className="text-primary" /> Incidencia para:{" "}
-            {selectedOrden.proveedor_nombre} (Orden #{selectedOrden.id})
-          </h3>
-          <textarea
-            className="w-full p-3 border rounded-xl"
-            placeholder="Describe el detalle del problema..."
-            onChange={(e) => setForm({ ...form, desc: e.target.value })}
-          />
-          <select
-            className="w-full p-3 border rounded-xl"
-            value={form.tipo}
-            onChange={(e) => setForm({ ...form, tipo: Number(e.target.value) })}
-          >
-            <option value={1}>Producto Dañado</option>
-            <option value={2}>Discrepancia / Faltante</option>
-            <option value={3}>Producto Vencido</option>
-          </select>
-          <button className="w-full bg-error text-white py-3 rounded-xl">
-            Confirmar Reporte
-          </button>
-        </form>
+      <h2 className="text-2xl font-bold flex items-center gap-3">
+        <div className="p-2.5 bg-error/10 rounded-xl text-error"><AlertTriangle className="w-6 h-6" /></div>
+        Panel de Incidencias Logísticas
+      </h2>
+      <p className="text-on-surface-variant">Revisa los problemas detectados durante la recepción de mercadería.</p>
+
+      {isLoading ? (
+        <div className="text-center py-10">Cargando reportes...</div>
+      ) : incidencias.length === 0 ? (
+        <div className="bg-white p-10 rounded-2xl border text-center text-outline">No hay incidencias reportadas. ¡Todo perfecto!</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {incidencias.map((inc) => (
+            <div key={inc.id} className={`bg-white p-5 rounded-2xl border shadow-sm flex flex-col justify-between ${inc.estado === 1 ? 'border-warning/50' : 'opacity-75'}`}>
+              
+              <div>
+                <div className="flex justify-between items-start mb-3">
+                  <span className={`text-xs font-bold px-2 py-1 rounded-md ${inc.estado === 1 ? 'bg-warning/10 text-warning-dark' : 'bg-success/10 text-success-dark'}`}>
+                    {inc.estado === 1 ? "Pendiente" : "Resuelta"}
+                  </span>
+                  <span className="text-xs font-bold text-outline">Ord. #{inc.orden_id}</span>
+                </div>
+                
+                <h3 className="font-bold text-lg">{inc.proveedor}</h3>
+                
+                <div className="flex items-center gap-2 mt-2 text-sm text-error font-medium">
+                  <PackageX className="w-4 h-4" /> {getTipoLabel(inc.tipo)}
+                </div>
+
+                <p className="mt-3 text-sm text-on-surface-variant bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/30">
+                  {inc.descripcion}
+                </p>
+              </div>
+
+              <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                <span className="text-xs text-outline flex items-center gap-1">
+                  <Calendar className="w-3 h-3" /> {new Date(inc.fecha).toLocaleDateString()}
+                </span>
+                
+                {inc.estado === 1 && (
+                  <button 
+                    onClick={() => handleMarcarResuelta(inc.id)}
+                    className="text-sm font-bold text-primary flex items-center gap-1 hover:underline"
+                  >
+                    <CheckCircle className="w-4 h-4" /> Marcar Resuelta
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

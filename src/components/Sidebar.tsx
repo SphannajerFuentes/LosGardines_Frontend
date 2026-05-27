@@ -9,6 +9,7 @@ import {
   Building2,
   AlertTriangle,
   PackageCheck,
+  PlusCircle,
 } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
@@ -16,52 +17,23 @@ export const Sidebar: React.FC = () => {
 
   // Definición de módulos y quién puede verlos (REQ-015)
   const menuItems = [
-    {
-      path: "/dashboard",
-      label: "Panel Principal",
-      icon: LayoutDashboard,
-      roles: ["Administrador", "Almacenero", "Farmacéutico"],
-    },
+    { path: "/dashboard", label: "Panel Principal", icon: LayoutDashboard, roles: ["Administrador", "Almacenero", "Farmacéutico"] },
+    
+    // Logística: Nueva estructura
+    { path: "/compras", label: "Recepción de Órdenes", icon: PackageCheck, roles: ["Administrador", "Almacenero"] },
+    { path: "/compras/nueva", label: "Emitir Pedido", icon: PlusCircle, roles: ["Administrador"] },
 
-    // Agrupamos la logística
-    {
-      path: "/compras",
-      label: "Recepción de Órdenes",
-      icon: PackageCheck,
-      roles: ["Administrador", "Almacenero"],
-    },
-    {
-      path: "/inventario",
-      label: "Gestión de Inventario",
-      icon: Package,
-      roles: ["Administrador", "Farmacéutico"],
-    },
-    {
-      path: "/incidencias",
-      label: "Reportar Incidencia",
-      icon: AlertTriangle,
-      roles: ["Administrador", "Almacenero"],
-    },
+    { path: "/operaciones", label: "Registro de Salidas", icon: PackageCheck, roles: ["Administrador", "Farmacéutico"] },
+    
+    { path: "/inventario", label: "Gestión de Inventario", icon: Package, roles: ["Administrador", "Farmacéutico"] },
+    { path: "/incidencias", label: "Reportar Incidencia", icon: AlertTriangle, roles: ["Administrador", "Almacenero"] },
 
-    // Gestión administrativa
-    {
-      path: "/admin/usuarios",
-      label: "Gestionar Usuarios",
-      icon: Users,
-      roles: ["Administrador"],
-    },
-    {
-      path: "/admin/proveedores",
-      label: "Gestionar Proveedores",
-      icon: Building2,
-      roles: ["Administrador"],
-    },
-    {
-      path: "/operaciones",
-      label: "Ventas y Kardex",
-      icon: Activity,
-      roles: ["Administrador", "Farmacéutico"],
-    },
+    // Administrativo
+    { path: "/admin/usuarios", label: "Gestionar Usuarios", icon: Users, roles: ["Administrador"] },
+    { path: "/admin/proveedores", label: "Gestionar Proveedores", icon: Building2, roles: ["Administrador"] },
+    
+    // Auditoría
+    { path: "/kardex", label: "Auditoría Kardex", icon: Activity, roles: ["Administrador", "Farmacéutico"] },
   ];
 
   return (

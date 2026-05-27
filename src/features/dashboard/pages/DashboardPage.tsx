@@ -1,10 +1,10 @@
-// src/features/dashboard/pages/DashboardPage.tsx
 import React, { useEffect, useState } from 'react';
 import { HeroSection } from '../components/HeroSection';
 import { KPICards } from '../components/KPICards';
 import { AlertPanel } from '../components/AlertPanel';
 import { dashboardService } from '../services/dashboardService';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { NotificacionFeedback } from '../../../components/NotificacionFeedback';
 
 export const DashboardPage: React.FC = () => {
   const [kpis, setKpis] = useState<any>(null);
@@ -16,7 +16,6 @@ export const DashboardPage: React.FC = () => {
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
-        // Hacemos ambas peticiones en paralelo para mejorar el rendimiento
         const [kpiData, alertsData] = await Promise.all([
           dashboardService.getKPIs(),
           dashboardService.getAlerts()
@@ -46,22 +45,13 @@ export const DashboardPage: React.FC = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="p-8">
-        <div className="bg-error-container text-on-error-container border border-error/20 p-6 rounded-2xl flex items-center gap-4 shadow-sm">
-          <AlertCircle className="w-8 h-8 text-error shrink-0" />
-          <div>
-            <h3 className="font-headline font-bold text-[16px]">Fallo de conexión</h3>
-            <p className="font-body text-[14px] opacity-90 mt-1">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="p-8 space-y-10 font-body">
+      {/* 🔔 Panel Dinámico de Notificaciones */}
+      {error && (
+        <NotificacionFeedback mensaje={error} tipo="error" onClose={() => setError(null)} />
+      )}
+
       <HeroSection />
       
       {/* Pasamos los datos dinámicos como props */}

@@ -21,12 +21,30 @@ export const logisticsService = {
     const { data } = await api.get("/api/v1/ordenes-compras?estado=1");
     return data;
   },
+  getOrdenDetalle: async (id: number) => {
+    const { data } = await api.get(`/api/v1/ordenes-compras/${id}/detalle`);
+    return data;
+  },
 
   recepcionarOrden: async (id: number, detalles: RecepcionDetalle[]) => {
     const { data } = await api.put(
       `/api/v1/ordenes-compras/${id}/recepcionar`,
       { detalles },
     );
+    return data;
+  },
+
+  crearOrden: async (datos: {
+    id_proveedor: number;
+    fecha_emision: string;
+    detalles: any[];
+  }) => {
+    return await api.post("/api/v1/ordenes-compras/", datos);
+  },
+
+  registrarSalida: async (items: { medicamento_id: number; cantidad: number }[]) => {
+    // El backend espera: { "items": [ { "medicamento_id": 1, "cantidad": 5 } ] }
+    const { data } = await api.post("/api/v1/operations/salida", { items });
     return data;
   },
 };

@@ -1,97 +1,84 @@
 import React, { useState, useEffect } from "react";
-import { useMedicamentos } from "../hooks/useMedicamentos";
-import { useIngresos } from "../hooks/useIngresos";
-import { Loader2 } from "lucide-react";
+import { useLotes } from "../hooks/useLotes";
+import { Loader2, CalendarX, AlertTriangle, ShieldCheck, Box } from "lucide-react";
+import { NotificacionFeedback } from "../../../components/NotificacionFeedback";
 
 export const IngresoStockPage: React.FC = () => {
-  const { medicamentos, cargarMedicamentos } = useMedicamentos();
-  const { registrarIngreso, isLoading } = useIngresos();
+  // Asumimos que tu hook puede retornar un error de red
+  const { lotes, isLoading, error } = useLotes(); 
+  const [msgError, setMsgError] = useState<string | null>(null);
 
-  const [form, setForm] = useState({
-    id_medicamento: "",
-    numero_lote: "",
-    cantidad: 0,
-    fecha_caducidad: "",
-  });
-
+  // Sincronizamos el error del hook con el estado local de la notificación
   useEffect(() => {
-    cargarMedicamentos();
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const exito = await registrarIngreso({
-      ...form,
-      cantidad: Number(form.cantidad),
-      id_medicamento: Number(form.id_medicamento),
-    });
-
-    if (exito) {
-      alert("Lote e inventario actualizados con éxito");
-      setForm({
-        id_medicamento: "",
-        numero_lote: "",
-        cantidad: 0,
-        fecha_caducidad: "",
-      });
-    }
-  };
+    if (error) setMsgError(error);
+  }, [error]);
 
   return (
-    <div className="p-8 max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Ingreso de Lote al Inventario</h2>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl border space-y-4"
-      >
-        <select
-          required
-          className="w-full p-3 border rounded-xl"
-          onChange={(e) => setForm({ ...form, id_medicamento: e.target.value })}
-        >
-          <option value="">Seleccione Medicamento</option>
-          {medicamentos.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.nombre}
-            </option>
-          ))}
-        </select>
+    <div className="space-y-6">
+      
+      {/* 🔔 Panel Dinámico de Notificaciones */}
+      {msgError && <NotificacionFeedback mensaje={msgError} tipo="error" onClose={() => setMsgError(null)} />}
 
-        <input
-          required
-          className="w-full p-3 border rounded-xl"
-          placeholder="Número de Lote"
-          onChange={(e) => setForm({ ...form, numero_lote: e.target.value })}
-        />
-        <input
-          required
-          type="number"
-          className="w-full p-3 border rounded-xl"
-          placeholder="Cantidad"
-          onChange={(e) =>
-            setForm({ ...form, cantidad: Number(e.target.value) })
-          }
-        />
-        <input
-          required
-          type="date"
-          className="w-full p-3 border rounded-xl"
-          onChange={(e) =>
-            setForm({ ...form, fecha_caducidad: e.target.value })
-          }
-        />
+      <div className="flex justify-between items-center">
+        <div>
+          <h3 className="text-lg font-bold text-on-surface">Inventario Físico (FEFO)</h3>
+          <p className="text-sm text-on-surface-variant">Lotes activos ordenados por prioridad de despacho.</p>
+        </div>
+      </div>
 
-        <button
-          disabled={isLoading}
-          className="w-full bg-primary text-white py-3 rounded-xl font-bold"
-        >
-          {isLoading ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            "Registrar Ingreso"
-          )}
-        </button>
-      </form>
+      <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden">
+        {isLoading ? (
+          <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+        ) : lotes.length === 0 ? (
+          <div className="p-12 text-center text-outline">No hay stock disponible actualmente.</div>
+        ) : (
+          <table className="w-full text-left text-sm">
+            <thead className="bg-surface-container-low/50">
+              <tr>
+                <th className="p-4">Medicamento</th>
+                <th className="p-4">Lote</th>
+                <th className="p-4 text-center">Stock</th>
+                <th className="p-4">Vencimiento</th>
+                <th className="p-4">Estado</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-outline-variant/20">
+              {lotes.map((l) => {
+                const isVencido = l.dias_para_vencer < 0;
+                const isCritico = l.semaforo === "ROJO";
+                
+                return (
+                  <tr key={l.id_lote} className={`hover:bg-surface-container-lowest transition-colors ${isVencido ? 'bg-error/5' : ''}`}>
+                    <td className="p-4 font-bold">{l.medicamento_nombre}</td>
+                    <td className="p-4 font-mono text-outline">{l.numero_lote}</td>
+                    <td className="p-4 text-center font-bold">{l.cantidad_disponible}</td>
+                    <td className="p-4">
+                      <div className="flex flex-col">
+                        <span className="font-medium">{l.fecha_caducidad}</span>
+                        <span className={`text-[11px] ${isVencido ? 'text-error font-bold' : 'text-outline'}`}>
+                          {isVencido ? "Vencido" : `Vence en ${l.dias_para_vencer} días`}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ${
+                        l.semaforo === "ROJO" || isVencido ? "bg-error/10 text-error" : 
+                        l.semaforo === "AMARILLO" ? "bg-warning/10 text-warning-dark" : 
+                        "bg-success/10 text-success"
+                      }`}>
+                        {isVencido ? <CalendarX className="w-3 h-3" /> : 
+                         isCritico ? <AlertTriangle className="w-3 h-3" /> : 
+                         <ShieldCheck className="w-3 h-3" />}
+                        {l.semaforo}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 };

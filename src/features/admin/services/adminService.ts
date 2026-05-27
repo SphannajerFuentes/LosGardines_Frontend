@@ -18,10 +18,20 @@ export const adminService = {
     const { data } = await api.post('/api/v1/admin/usuarios', datos);
     return data;
   },
+  listarUsuarios: async () => {
+    const { data } = await api.get('/api/v1/admin/usuarios'); 
+    return data;
+  },
 
   registrarProveedor: async (datos: ProveedorInput) => {
     // CORREGIDO: ahora recibimos y enviamos 'datos' correctamente
     const { data } = await api.post('/api/v1/admin/proveedores', datos);
     return data;
-  }
+  },
+
+  listarProveedores: async () => {
+    const { data } = await api.get('/api/v1/admin/proveedores'); 
+    return data;
+  },
+
 };

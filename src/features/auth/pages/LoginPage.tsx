@@ -1,7 +1,6 @@
-// src/features/auth/pages/LoginPage.tsx
 import React from 'react';
 import { FormularioLogin } from '../components/FormularioLogin';
-import { NotificacionError } from '../../../components/NotificacionError'; // Ajusta la ruta según tu carpetas
+import { NotificacionFeedback } from '../../../components/NotificacionFeedback'; 
 
 import { HeartPulse } from 'lucide-react';
 import { useLogin } from '../hook/useLogin';
@@ -27,11 +26,9 @@ export const LoginPage: React.FC = () => {
             <span className="text-[22px] font-headline font-bold text-on-surface tracking-tight">Los Girasoles</span>
           </div>
           
-          {/* Tarjeta de Formulario */}
           <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-8 shadow-sm space-y-6">
             
-            {/* 🔔 Notificación de Error Dinámica */}
-            <NotificacionError mensaje={error} onClose={limpiarError} />
+            <NotificacionFeedback mensaje={error} tipo="error" onClose={limpiarError} />
 
             <FormularioLogin onSubmit={login} isLoading={isLoading} />
           </div>

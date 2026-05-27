@@ -13,6 +13,10 @@ import { RecepcionPage } from "./features/logistics/pages/RecepcionPage";
 import { IngresoStockPage } from './features/logistics/pages/IngresoStockPage';
 import { GestionInventarioPage } from "./features/logistics/pages/GestionInventarioPage";
 
+import { SimuladorKardexPage } from "./features/simulador/pages/SimuladorKardexPage";
+import { KardexPage } from "./features/logistics/pages/KardexPage";
+import { CrearOrdenPage } from "./features/logistics/pages/CrearOrdenPage";
+
 const RutaProtegida = ({ children }: { children: React.ReactElement }) => {
   const { usuario, cargandoSesion } = useContext(AuthContext);
 
@@ -69,29 +73,24 @@ export function AppRoutes() {
         }
       />
 
-      <Route
-        path="/admin/proveedores"
-        element={
-          <RutaProtegida>
-            <Layout>
-              <AdminGuard>
-                <ProveedoresPage />
-              </AdminGuard>
-            </Layout>
-          </RutaProtegida>
-        }
-      />
+      {/* Rutas de Administrador */}
+      <Route path="/admin/proveedores" element={
+        <RutaProtegida><Layout><AdminGuard><ProveedoresPage /></AdminGuard></Layout></RutaProtegida>
+      } />
 
-      <Route
-        path="/compras"
-        element={
-          <RutaProtegida>
-            <Layout>
-              <RecepcionPage />
-            </Layout>
-          </RutaProtegida>
-        }
-      />
+      {/* Logística y Órdenes */}
+      <Route path="/compras" element={
+        <RutaProtegida><Layout><RecepcionPage /></Layout></RutaProtegida>
+      } />
+      
+    <Route path="/compras/nueva" element={
+        <RutaProtegida><Layout><CrearOrdenPage /></Layout></RutaProtegida>
+      } />
+
+      {/* Kardex Real */}
+      <Route path="/kardex" element={
+        <RutaProtegida><Layout><KardexPage /></Layout></RutaProtegida>
+      } />
       <Route
         path="/incidencias"
         element={
@@ -121,6 +120,19 @@ export function AppRoutes() {
           </Layout>
         </RutaProtegida>
       } />
+
+      {/* Módulo de Operaciones e Inventario (HU08, HU09, HU10) */}
+      <Route
+        path="/operaciones"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <SimuladorKardexPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+
 
       {/* Cualquier otra ruta inexistente */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -2,7 +2,12 @@
 import { api } from '../../../config/api';
 
 export const incidenciasService = {
-  crearIncidencia: async (datos: any) => {
-    return await api.post('/api/v1/incidencias/', datos);
+  listar: async () => {
+    const { data } = await api.get('/api/v1/incidencias/');
+    return data;
+  },
+  resolver: async (id: number) => {
+    const { data } = await api.put(`/api/v1/incidencias/${id}/resolver`);
+    return data;
   }
 };

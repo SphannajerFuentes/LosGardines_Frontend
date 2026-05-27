@@ -6,7 +6,7 @@ interface AlertaItem {
   id: string | number;
   medicamento: string;
   lote?: string;
-  tipo: 'critico' | 'advertencia' | string; // Determina si es por caducidad severa o stock bajo
+  tipo: 'critico' | 'advertencia' | string;
   mensaje: string;
 }
 
@@ -16,7 +16,7 @@ interface AlertPanelProps {
 
 export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
   return (
-    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden flex flex-col h-[400px]">
+    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden flex flex-col h-100">
       {/* Cabecera del Panel */}
       <div className="p-5 border-b border-outline-variant/30 bg-surface-container-low flex justify-between items-center">
         <h3 className="font-headline font-bold text-on-surface flex items-center gap-2 text-[15px]">
