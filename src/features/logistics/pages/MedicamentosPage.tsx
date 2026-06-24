@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useMedicamentos } from "../../logistics/hooks/useMedicamentos";
+import { useMedicamentos } from "../hooks/useMedicamentos";
 import { AlertCircle, Loader2, Plus } from "lucide-react";
 import { NotificacionFeedback } from "../../../components/NotificacionFeedback";
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IngresoStockPage } from './IngresoStockPage';
-import { MedicamentosPage } from './MedicamentoPage';
+import { MedicamentosPage } from './MedicamentosPage';
 import { PackageSearch, ArrowDownToLine } from 'lucide-react';
 import { NotificacionFeedback } from '../../../components/NotificacionFeedback';
 

@@ -3,7 +3,7 @@ import { FormularioLogin } from '../components/FormularioLogin';
 import { NotificacionFeedback } from '../../../components/NotificacionFeedback'; 
 
 import { HeartPulse } from 'lucide-react';
-import { useLogin } from '../hook/useLogin';
+import { useLogin } from '../hooks/useLogin';
 
 export const LoginPage: React.FC = () => {
   const { login, isLoading, error, limpiarError } = useLogin();

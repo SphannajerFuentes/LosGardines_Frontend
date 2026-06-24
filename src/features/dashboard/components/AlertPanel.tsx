@@ -29,7 +29,7 @@ export const AlertPanel: React.FC<AlertPanelProps> = ({ alerts }) => {
       </div>
       
       {/* Cuerpo scrolleable */}
-      <div className="p-5 space-y-4 overflow-y-auto flex-1自定义-scroll">
+      <div className="p-5 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
         {alerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-outline gap-2 py-8">
             <Inbox className="w-8 h-8" />
