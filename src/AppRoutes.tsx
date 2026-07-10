@@ -8,6 +8,7 @@ import { Layout } from "./components/Layout";
 import { AdminGuard } from "./components/AdminGuard";
 import { UsuariosPage } from "./features/admin/pages/UsuariosPage";
 import { ProveedoresPage } from "./features/admin/pages/ProveedoresPage";
+import { LogsPage } from "./features/admin/pages/LogsPage";
 import { IncidenciasPage } from "./features/logistics/pages/IncidenciasPage";
 import { RecepcionPage } from "./features/logistics/pages/RecepcionPage";
 import { IngresoStockPage } from './features/logistics/pages/IngresoStockPage';
@@ -72,6 +73,18 @@ export function AppRoutes() {
           </RutaProtegida>
         }
       />
+      <Route
+  path="/admin/logs"
+  element={
+    <RutaProtegida>
+      <Layout>
+        <AdminGuard>
+          <LogsPage />
+        </AdminGuard>
+      </Layout>
+    </RutaProtegida>
+  }
+/>
 
       {/* Rutas de Administrador */}
       <Route path="/admin/proveedores" element={
