@@ -75,30 +75,29 @@ export const LogsPage: React.FC = () => {
 
               {logs.map((log) => (
 
-                <tr key={log.id} className="border-b">
+                <tr key={log.fecha} className="border-b">
 
-                  <td className="p-3">
-                    {log.id_usuario}
-                  </td>
+             <td className="p-3">
+              {log.usuario}
+             </td>
 
-                  <td className="p-3">
-                    {log.tipo_movimiento}
-                  </td>
+            <td className="p-3">
+              {log.tipo_movimiento}
+            </td>
 
-                  <td className="p-3">
-                    {log.cantidad}
-                  </td>
+           <td className="p-3">
+           {log.cantidad}
+          </td>
 
-                  <td className="p-3">
-                    {log.motivo_salida || "-"}
-                  </td>
+            <td className="p-3">
+             {log.motivo ?? "-"}
+               </td>
 
-                  <td className="p-3">
-                    {log.creado_el}
-                  </td>
+            <td className="p-3">
+                {log.fecha}
+                </td>
 
-                </tr>
-
+              </tr>
               ))}
 
             </tbody>
