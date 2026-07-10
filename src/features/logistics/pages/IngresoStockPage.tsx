@@ -48,7 +48,7 @@ export const IngresoStockPage: React.FC = () => {
                 const isCritico = l.semaforo === "ROJO";
                 
                 return (
-                  <tr key={l.id_lote} className={`hover:bg-surface-container-lowest transition-colors ${isVencido ? 'bg-error/5' : ''}`}>
+                  <tr key={l.id} className={`hover:bg-surface-container-lowest transition-colors ${isVencido ? 'bg-error/5' : ''}`}>
                     <td className="p-4 font-bold">{l.medicamento_nombre}</td>
                     <td className="p-4 font-mono text-outline">{l.numero_lote}</td>
                     <td className="p-4 text-center font-bold">{l.cantidad_disponible}</td>

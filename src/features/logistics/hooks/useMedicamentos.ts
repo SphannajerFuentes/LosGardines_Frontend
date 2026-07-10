@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { medicamentoService } from '../services/medicamentoService';
 
+const extraerMensajeError = (err: any, fallback: string): string => {
+  const detail = err.response?.data?.detail;
+  if (Array.isArray(detail)) {
+    return detail.map((d: any) => d.msg).join(", ");
+  }
+  return detail || fallback;
+};
+
 export const useMedicamentos = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [medicamentos, setMedicamentos] = useState<any[]>([]);
@@ -13,7 +21,7 @@ export const useMedicamentos = () => {
       const data = await medicamentoService.listar();
       setMedicamentos(data);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "No se pudieron cargar los medicamentos.");
+      setError(extraerMensajeError(err, "No se pudieron cargar los medicamentos."));
     } finally {
       setIsLoading(false);
     }
@@ -26,7 +34,7 @@ export const useMedicamentos = () => {
       await medicamentoService.registrar(datos);
       return true;
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Error al intentar guardar el medicamento.");
+      setError(extraerMensajeError(err, "Error al intentar guardar el medicamento."));
       return false;
     } finally {
       setIsLoading(false);
