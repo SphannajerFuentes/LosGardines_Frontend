@@ -8,9 +8,10 @@ import { Layout } from "./components/Layout";
 import { AdminGuard } from "./components/AdminGuard";
 import { UsuariosPage } from "./features/admin/pages/UsuariosPage";
 import { ProveedoresPage } from "./features/admin/pages/ProveedoresPage";
+import { LogsPage } from "./features/admin/pages/LogsPage";
 import { IncidenciasPage } from "./features/logistics/pages/IncidenciasPage";
 import { RecepcionPage } from "./features/logistics/pages/RecepcionPage";
-import { IngresoStockPage } from './features/logistics/pages/IngresoStockPage';
+import { IngresoStockPage } from "./features/logistics/pages/IngresoStockPage";
 import { GestionInventarioPage } from "./features/logistics/pages/GestionInventarioPage";
 
 import { SimuladorKardexPage } from "./features/simulador/pages/SimuladorKardexPage";
@@ -72,25 +73,67 @@ export function AppRoutes() {
           </RutaProtegida>
         }
       />
+      <Route
+        path="/admin/logs"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <AdminGuard>
+                <LogsPage />
+              </AdminGuard>
+            </Layout>
+          </RutaProtegida>
+        }
+      />
 
       {/* Rutas de Administrador */}
-      <Route path="/admin/proveedores" element={
-        <RutaProtegida><Layout><AdminGuard><ProveedoresPage /></AdminGuard></Layout></RutaProtegida>
-      } />
+      <Route
+        path="/admin/proveedores"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <AdminGuard>
+                <ProveedoresPage />
+              </AdminGuard>
+            </Layout>
+          </RutaProtegida>
+        }
+      />
 
       {/* Logística y Órdenes */}
-      <Route path="/compras" element={
-        <RutaProtegida><Layout><RecepcionPage /></Layout></RutaProtegida>
-      } />
-      
-    <Route path="/compras/nueva" element={
-        <RutaProtegida><Layout><CrearOrdenPage /></Layout></RutaProtegida>
-      } />
+      <Route
+        path="/ingreso-stock"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <IngresoStockPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
+
+      <Route
+        path="/compras/nueva"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <CrearOrdenPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
 
       {/* Kardex Real */}
-      <Route path="/kardex" element={
-        <RutaProtegida><Layout><KardexPage /></Layout></RutaProtegida>
-      } />
+      <Route
+        path="/kardex"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <KardexPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
       <Route
         path="/incidencias"
         element={
@@ -113,13 +156,16 @@ export function AppRoutes() {
         }
       />
 
-      <Route path="/inventario" element={
-        <RutaProtegida>
-          <Layout>
-            <GestionInventarioPage /> 
-          </Layout>
-        </RutaProtegida>
-      } />
+      <Route
+        path="/inventario"
+        element={
+          <RutaProtegida>
+            <Layout>
+              <GestionInventarioPage />
+            </Layout>
+          </RutaProtegida>
+        }
+      />
 
       {/* Módulo de Operaciones e Inventario (HU08, HU09, HU10) */}
       <Route
@@ -132,7 +178,6 @@ export function AppRoutes() {
           </RutaProtegida>
         }
       />
-
 
       {/* Cualquier otra ruta inexistente */}
       <Route path="*" element={<Navigate to="/" replace />} />

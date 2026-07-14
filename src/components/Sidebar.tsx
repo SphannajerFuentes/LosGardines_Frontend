@@ -34,6 +34,7 @@ export const Sidebar: React.FC = () => {
     
     // Auditoría
     { path: "/kardex", label: "Auditoría Kardex", icon: Activity, roles: ["Administrador", "Farmacéutico"] },
+    { path: "/admin/logs", label: "Logs", icon: Activity, roles: ["Administrador", "Farmacéutico"] },
   ];
 
   return (
