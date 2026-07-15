@@ -20,7 +20,8 @@ export const Sidebar: React.FC = () => {
     { path: "/dashboard", label: "Panel Principal", icon: LayoutDashboard, roles: ["Administrador", "Almacenero", "Farmacéutico"] },
     
     // Logística: Nueva estructura
-    { path: "/compras", label: "Recepción de Órdenes", icon: PackageCheck, roles: ["Administrador", "Almacenero"] },
+    // Añadimos 'exact: true' para identificar que requiere coincidencia exacta
+    { path: "/compras", label: "Recepción de Órdenes", icon: PackageCheck, roles: ["Administrador", "Almacenero"], exact: true },
     { path: "/compras/nueva", label: "Emitir Pedido", icon: PlusCircle, roles: ["Administrador"] },
 
     { path: "/operaciones", label: "Registro de Salidas", icon: PackageCheck, roles: ["Administrador", "Farmacéutico"] },
@@ -60,6 +61,8 @@ export const Sidebar: React.FC = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
+                // Si la ruta tiene exact: true, activamos 'end' para que no se raye con subrutas
+                end={item.exact}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl transition-all duration-200 font-body text-[13px] md:text-[14px] font-semibold ${
                     isActive
