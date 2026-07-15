@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useKardex } from '../hooks/useKardex';
 import { useMedicamentos } from '../hooks/useMedicamentos';
-import { Loader2, Search, AlertCircle } from 'lucide-react';
+import { Loader2,} from 'lucide-react';
 import { NotificacionFeedback } from '../../../components/NotificacionFeedback';
 
 export const KardexPage: React.FC = () => {
@@ -40,6 +40,7 @@ export const KardexPage: React.FC = () => {
       <select 
         className="w-full md:w-1/2 lg:w-1/3 p-3 border rounded-xl bg-surface-container-low outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm md:text-base"
         onChange={(e) => handleSelect(e.target.value)}
+        value={selectedId} 
       >
         <option value="">Seleccione un medicamento para auditar...</option>
         {medicamentos.map(m => <option key={m.id} value={m.id}>{m.nombre}</option>)}
