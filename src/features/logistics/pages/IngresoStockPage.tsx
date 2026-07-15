@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLotes } from "../hooks/useLotes";
-import { Loader2, CalendarX, AlertTriangle, ShieldCheck, Box } from "lucide-react";
+import { Loader2, CalendarX, AlertTriangle, ShieldCheck } from "lucide-react";
 import { NotificacionFeedback } from "../../../components/NotificacionFeedback";
 
 export const IngresoStockPage: React.FC = () => {
