@@ -24,12 +24,18 @@ export const RecepcionPage: React.FC = () => {
     const fecha = new Date();
     const mesAnio = `${(fecha.getMonth() + 1).toString().padStart(2, "0")}${fecha.getFullYear().toString().slice(-2)}`;
 
+    // Vencimiento automático: hoy + 2 años
+    const fechaVencimiento = new Date();
+    fechaVencimiento.setFullYear(fechaVencimiento.getFullYear() + 2);
+    const fechaVencimientoISO = fechaVencimiento.toISOString().split("T")[0];
+
+
     setItems(
       detalle.map((d: any) => ({
         ...d,
         cantidad_pedida: d.cantidad,
         numero_lote: `LT-${d.id_medicamento}-${mesAnio}-${Math.floor(Math.random() * 900 + 100)}`,
-        fecha_caducidad: "",
+        fecha_caducidad: fechaVencimientoISO,
         cantidad_recibida: d.cantidad,
         tipo_incidencia: 2,
       }))
@@ -39,22 +45,22 @@ export const RecepcionPage: React.FC = () => {
   const handleUpdateItem = (index: number, campo: string, valor: any) => {
     const nuevosItems = [...items];
     nuevosItems[index][campo] = valor;
-    
+
     if (campo === 'cantidad_recibida' && valor === 0) {
       nuevosItems[index].numero_lote = "N/A";
       nuevosItems[index].fecha_caducidad = new Date().toISOString().split("T")[0];
     }
-    
+
     setItems(nuevosItems);
   };
 
   const handleRecepcion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedOrden) return;
-    
+
     setMsgError(null);
     setMsgSuccess(null);
-    
+
     const exito = await procesarRecepcion(selectedOrden.id, items);
     if (exito) {
       setMsgSuccess(`Recepción de Orden N°${selectedOrden.id} procesada. Inventario e incidencias actualizados de forma conforme.`);
@@ -68,7 +74,7 @@ export const RecepcionPage: React.FC = () => {
 
   return (
     <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-6">
-      
+
       {/* 🔔 Panel Dinámico de Notificaciones */}
       <div className="space-y-4">
         {msgError && <NotificacionFeedback mensaje={msgError} tipo="error" onClose={() => setMsgError(null)} />}
@@ -93,7 +99,7 @@ export const RecepcionPage: React.FC = () => {
       ) : (
         <form onSubmit={handleRecepcion} className="space-y-6">
           <button type="button" onClick={() => setSelectedOrden(null)} className="flex items-center text-primary font-bold hover:underline">
-            <ArrowLeft className="w-4 h-4 mr-1"/> Volver a las Órdenes
+            <ArrowLeft className="w-4 h-4 mr-1" /> Volver a las Órdenes
           </button>
 
           <div className="bg-white p-6 rounded-2xl border shadow-sm space-y-6">
@@ -120,7 +126,12 @@ export const RecepcionPage: React.FC = () => {
                     </div>
                     <div>
                       <label className="text-xs font-bold text-outline uppercase">Vencimiento</label>
-                      <input required type="date" disabled={item.cantidad_recibida === 0} className="w-full p-2.5 border border-outline-variant/50 rounded-lg mt-1 disabled:opacity-50" onChange={e => handleUpdateItem(index, 'fecha_caducidad', e.target.value)} />
+                      <input
+                        type="date"
+                        disabled
+                        value={item.fecha_caducidad}
+                        className="w-full p-2.5 border border-outline-variant/50 rounded-lg mt-1 disabled:opacity-70 bg-surface-container-low font-medium"
+                      />
                     </div>
                   </div>
 
