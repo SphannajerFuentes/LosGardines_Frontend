@@ -57,14 +57,7 @@ export const DashboardPage: React.FC = () => {
       {/* Pasamos los datos dinámicos como props */}
       <KPICards data={kpis} />
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <AlertPanel alerts={alerts} />
-        
-        {/* Espacio reservado para Actividad Reciente o Gráficos */}
-        <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm p-6 flex items-center justify-center text-outline">
-          <p className="text-[14px] font-medium">Panel de actividades del sistema disponible en la siguiente fase</p>
-        </div>
-      </div>
+      <AlertPanel alerts={alerts} />
     </div>
   );
 };
